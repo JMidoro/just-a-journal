@@ -1,46 +1,17 @@
-# Getting Started with Create React App
+⚠ This is just a quick application I built to drive some personal experiments. It is not intended to be used in any kind of production environment, and is not actively maintained.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# The Simplest Journaling App
+I wanted to build just a quick, extremely minimal application for journaling in a way that was contextually vaccuous, for the sake of collecting genera/unstructured data for analysis and experimentation. It was important that the application was as simple as possible, didn't look exceptionally (read: distractingly) good or bad, allowed entry with minimal friction to allow continuous writing/editing while thoughts were fresh, stored data in a way that was interoperable with at least some other widely used format (in this case, TiddlyWiki), and was easily accessible from any device.
 
-## Available Scripts
+A key consideration here was that I needed to be able to write without the influence of additional posts to ensure that entries were honest and didn't fit any particular narrative (intentionally or unintentionally), to ensure that it is a solid fit for behavioral analysis and support.
 
-In the project directory, you can run:
+# Usage
+## Installation
+To run without hot reloading:
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Build the application with `npm run build`
+4. Run the application with `npm start`
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Development
+For development, the react scripts you'll want to use are `npm run dev:backend` and `npm run dev:fronted`, respectively. The backend will run the express server with nodemon, and the frontend will run the react scripts on a separate port with hot reloading.
