@@ -2,8 +2,19 @@ const Express = require("express");
 const fs = require("fs");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
+const AWS = require("aws-sdk");
 const app = Express();
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+AWS.config.update({
+	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+	region: process.env.S3_REGION,
+});
+
+const s3 = new AWS.S3();
 
 const getTodaysEntry = () => {
 	const midnight = new Date();
@@ -51,33 +62,6 @@ app.use(bodyParser.json());
 // Pass through to the static files
 app.use(Express.static("./build"));
 
-app.get("/posts/:tiddlerId", (req, res) => {
-	const tiddlerId = req.params.tiddlerId;
-	const tiddlerPath = `./tiddlystore/${tiddlerId}.json`;
-	if (fs.existsSync(tiddlerPath)) {
-		const tiddler_plainText = fs.readFileSync(tiddlerPath, "utf8");
-		const tiddler = JSON.parse(tiddler_plainText);
-		res.json(tiddler);
-	} else {
-		res.status(404).send("Not found");
-	}
-});
-
-app.get("/posts", (req, res) => {
-	const tiddlers = fs.readdirSync("./tiddlystore").map((tiddlerId) => {
-		const tiddler_plainText = fs.readFileSync(
-			`./tiddlystore/${tiddlerId}`,
-			"utf8"
-		);
-		const tiddler = JSON.parse(tiddler_plainText);
-		return {
-			...tiddler,
-			id: tiddlerId.split(".")[0],
-		};
-	});
-	res.json(tiddlers);
-});
-
 app.post("/save", (req, res) => {
 	const tiddler = getTodaysEntry();
 
@@ -91,6 +75,22 @@ app.post("/save", (req, res) => {
 		delete tiddler.newlyCreated;
 		fs.writeFileSync(tiddlerPath, JSON.stringify(tiddler, null, 2));
 		res.status(200).send("OK");
+
+		// Upload to S3
+		const params = {
+			Bucket: process.env.S3_BUCKET_NAME,
+			Key: `${tiddler.id}.json`,
+			Body: JSON.stringify(tiddler, null, 2),
+		};
+
+		s3.upload(params, function (err, data) {
+			if (err) {
+				console.log("Error", err);
+			}
+			if (data) {
+				console.log("Upload Success", data.Location);
+			}
+		});
 	}
 });
 
