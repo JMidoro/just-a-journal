@@ -2,19 +2,14 @@ import { CardTitle, CardHeader, CardContent, CardFooter, Card } from "../ui/card
 import { SVGProps } from "react"
 import { Textarea } from "../ui/textarea"
 
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import { Button } from "../ui/button"
 
 const Entry = () => {
-  // Let's set an interval to clear our entry at midnight.
-  // We'll use the useEffect hook to set it up.
   useEffect(() => {
       const setClearInterval = () => {
-          // Get the current time.
           const now = new Date();
-          // Get the time until midnight.
           const untilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0).getTime() - now.getTime();
-          // Set an interval to clear the entry at midnight.
           const interval = setInterval(() => {
               setEntry("")
               clearInterval(interval)
@@ -24,13 +19,12 @@ const Entry = () => {
 
       setClearInterval()
   }, [])
-  // Should be typed as an array of NodeJS.Timeout objects.
+  
+  
   const timeouts: NodeJS.Timeout[] = [];
 
   const debounceSave = (text: string, delay: number) => {
-      // Clear all timeouts.
       timeouts.forEach((timeout) => clearTimeout(timeout));
-      // Add a new timeout.
       timeouts.push(setTimeout(() => {
           saveEntry(text)
           setEntry(text)
@@ -48,13 +42,9 @@ const Entry = () => {
       })
   }
 
-  // On first render...
   useEffect(() => {
-      // Get the entry from the api (localhost:4445/active)
       fetch("/active")
-          // Convert the response to json
           .then((res) => res.json())
-          // Set the entry state to the entry from the api
           .then((res) => setEntry(res.text))
   }, [])
 
